@@ -11,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Net;
 
@@ -30,21 +31,22 @@ namespace AspNetCoreDashboard_RecalculateTotals {
             services
                 .AddResponseCompression()
                 .AddDevExpressControls()
-                .AddMvc()
+                .AddMvc();
 
-                .AddDefaultDashboardController((configurator, serviceProvider) => {
-                    configurator.SetConnectionStringsProvider(new DashboardConnectionStringsProvider(Configuration));
-                    DashboardFileStorage dashboardFileStorage = new DashboardFileStorage(FileProvider.GetFileInfo("Data/Dashboards").PhysicalPath);
-                    configurator.SetDashboardStorage(dashboardFileStorage);
+            services.AddScoped<DashboardConfigurator>((IServiceProvider serviceProvider) => {
+                DashboardConfigurator configurator = new DashboardConfigurator();
+                configurator.SetConnectionStringsProvider(new DashboardConnectionStringsProvider(Configuration));
+                DashboardFileStorage dashboardFileStorage = new DashboardFileStorage(FileProvider.GetFileInfo("Data/Dashboards").PhysicalPath);
+                configurator.SetDashboardStorage(dashboardFileStorage);
 
-                    var contextAccessor = serviceProvider.GetService<IHttpContextAccessor>();
-
-                    configurator.CustomExport += (s, e) => {
-                        var gridTotalsString = WebUtility.UrlDecode(contextAccessor.HttpContext.Request.Form["gridTotals"]);
-                        List<GridTotal> gridsTotals = JsonConvert.DeserializeObject<List<GridTotal>>(gridTotalsString);
-                        CustomGridTotalsExportModule.CustomizeGridsTotals(e.Report, gridsTotals);
-                    };
-                });
+                var contextAccessor = serviceProvider.GetService<IHttpContextAccessor>();
+                configurator.CustomExport += (s, e) => {
+                    var gridTotalsString = WebUtility.UrlDecode(contextAccessor.HttpContext.Request.Form["gridTotals"]);
+                    List<GridTotal> gridsTotals = JsonConvert.DeserializeObject<List<GridTotal>>(gridTotalsString);
+                    CustomGridTotalsExportModule.CustomizeGridsTotals(e.Report, gridsTotals);
+                };
+                return configurator;
+            });
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
         }
@@ -64,7 +66,7 @@ namespace AspNetCoreDashboard_RecalculateTotals {
 
             app.UseRouting();
             app.UseEndpoints(endpoints => {
-                EndpointRouteBuilderExtension.MapDashboardRoute(endpoints, "dashboardControl");
+                EndpointRouteBuilderExtension.MapDashboardRoute(endpoints, "dashboardControl", "DefaultDashboard");
                 endpoints.MapRazorPages();
                 endpoints.MapControllerRoute(
                     name: "default",
