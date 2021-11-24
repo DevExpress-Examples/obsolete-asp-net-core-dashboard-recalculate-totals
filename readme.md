@@ -36,3 +36,7 @@ The example also modifies Total values when you export data. The [DashboardConfi
 * [Totals](https://docs.devexpress.com/Dashboard/117302/web-dashboard/create-dashboards-on-the-web/dashboard-item-settings/grid/totals)
 * [Manage Extensions in ASP.NET Core](https://docs.devexpress.com/Dashboard/403354/web-dashboard/aspnet-core-dashboard-control/manage-extensions)
 * [Access to Underlying Widgets in ASP.NET Core](https://docs.devexpress.com/Dashboard/401090/web-dashboard/aspnet-core-dashboard-control/access-to-underlying-widgets)
+
+## More Exmples
+
+- [Dashboard for WinForms - How to Recalculate Totals When You Filter a Grid](https://github.com/DevExpress-Examples/winforms-dashboard-recalculate-totals)
