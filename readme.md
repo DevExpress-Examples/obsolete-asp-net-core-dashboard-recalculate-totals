@@ -20,8 +20,7 @@ The [CustomGridTotalsExtension.js](./CS/AspNetCoreDashboard_RecalculateTotals/ww
 
 The example also modifies Total values when you export data. The [DashboardConfigurator.CustomExport](https://docs.devexpress.com/Dashboard/DevExpress.DashboardWeb.DashboardConfigurator.CustomExport) event handler overrides the export procedure.
 
-<!-- default file list -->
-## Files to Look At
+## Files to Review
 
 * [CustomGridTotalsExtension.js](./CS/AspNetCoreDashboard_RecalculateTotals/wwwroot/js/CustomGridTotalsExtension.js)
 * [_Layout.cshtml](./CS/AspNetCoreDashboard_RecalculateTotals/Pages/_Layout.cshtml)
